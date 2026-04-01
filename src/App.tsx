@@ -214,54 +214,327 @@ const ContactForm = () => {
 
 // --- Page Sections ---
 
+const HeroSparks = () => {
+  const sparks = Array.from({ length: 18 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    delay: Math.random() * 5,
+    duration: 2.5 + Math.random() * 3,
+    size: 1 + Math.random() * 2.5,
+    opacity: 0.3 + Math.random() * 0.5,
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+      {sparks.map(s => (
+        <motion.div
+          key={s.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${s.left}%`,
+            bottom: '-5%',
+            width: s.size,
+            height: s.size,
+            background: `radial-gradient(circle, rgba(245,158,11,${s.opacity}) 0%, rgba(37,99,235,${s.opacity * 0.5}) 100%)`,
+            boxShadow: `0 0 ${s.size * 3}px rgba(245,158,11,${s.opacity * 0.6})`,
+          }}
+          animate={{
+            y: [0, -window.innerHeight * 1.2],
+            x: [0, (Math.random() - 0.5) * 80],
+            opacity: [0, s.opacity, s.opacity, 0],
+            scale: [0.5, 1, 1, 0.3],
+          }}
+          transition={{
+            duration: s.duration,
+            delay: s.delay,
+            repeat: Infinity,
+            ease: 'easeOut',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+/**
+ * Meshed Gears — Chunky Rounded Design
+ * Gear ratio: 8:6 = 4:3, Large 10s CW, Small 7.5s CCW
+ */
+const generateSoftGearPath = (cx: number, cy: number, teeth: number, outerR: number, rootR: number): string => {
+  const step = (Math.PI * 2) / teeth;
+  const tipFrac = 0.30;
+  const gapFrac = 0.30;
+  const riseFrac = (1 - tipFrac - gapFrac) / 2;
+  let d = '';
+  for (let i = 0; i < teeth; i++) {
+    const base = i * step;
+    const gapEnd = base + gapFrac * step;
+    const tipStart = gapEnd + riseFrac * step;
+    const tipEnd = tipStart + tipFrac * step;
+    const nextGap = base + step;
+    if (i === 0) d += `M ${cx + rootR * Math.cos(base)} ${cy + rootR * Math.sin(base)} `;
+    d += `A ${rootR} ${rootR} 0 0 1 ${cx + rootR * Math.cos(gapEnd)} ${cy + rootR * Math.sin(gapEnd)} `;
+    const cp1x = cx + (rootR + (outerR - rootR) * 0.15) * Math.cos(gapEnd + riseFrac * step * 0.35);
+    const cp1y = cy + (rootR + (outerR - rootR) * 0.15) * Math.sin(gapEnd + riseFrac * step * 0.35);
+    const cp2x = cx + (outerR - (outerR - rootR) * 0.1) * Math.cos(tipStart - riseFrac * step * 0.3);
+    const cp2y = cy + (outerR - (outerR - rootR) * 0.1) * Math.sin(tipStart - riseFrac * step * 0.3);
+    d += `C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${cx + outerR * Math.cos(tipStart)} ${cy + outerR * Math.sin(tipStart)} `;
+    d += `A ${outerR} ${outerR} 0 0 1 ${cx + outerR * Math.cos(tipEnd)} ${cy + outerR * Math.sin(tipEnd)} `;
+    const cp3x = cx + (outerR - (outerR - rootR) * 0.1) * Math.cos(tipEnd + riseFrac * step * 0.3);
+    const cp3y = cy + (outerR - (outerR - rootR) * 0.1) * Math.sin(tipEnd + riseFrac * step * 0.3);
+    const cp4x = cx + (rootR + (outerR - rootR) * 0.15) * Math.cos(nextGap - riseFrac * step * 0.35);
+    const cp4y = cy + (rootR + (outerR - rootR) * 0.15) * Math.sin(nextGap - riseFrac * step * 0.35);
+    d += `C ${cp3x} ${cp3y} ${cp4x} ${cp4y} ${cx + rootR * Math.cos(nextGap)} ${cy + rootR * Math.sin(nextGap)} `;
+  }
+  return d + 'Z';
+};
+
+const MeshedGears = () => {
+  const largeTeeth = 8;
+  const smallTeeth = 6;
+  const largeOuterR = 320;
+  const largeRootR = 250;
+  const largeHubR = 160;
+  const smallOuterR = 200;
+  const smallRootR = 155;
+  const smallHubR = 100;
+
+  // Center distance — widened so teeth slot INTO gaps, not overlap
+  const centerDist = 480;
+  const largePeriod = 6;
+  const smallPeriod = largePeriod * (smallTeeth / largeTeeth);
+  const smallPhaseOffset = 180 / smallTeeth;
+  // Mesh delay = half a tooth pitch in time — keeps teeth in gaps at any speed
+  const meshDelay = largePeriod / (largeTeeth * 2);
+
+  const svgW = 1000;
+  const svgH = 1050;
+  const largeCx = 740;
+  const largeCy = 680;
+  const meshAngle = -108 * (Math.PI / 180);
+  const smallCx = largeCx + centerDist * Math.cos(meshAngle);
+  const smallCy = largeCy + centerDist * Math.sin(meshAngle);
+
+  return (
+    <div className="absolute bottom-[-200px] right-[-400px] z-[4] pointer-events-none hidden md:block"
+      style={{ width: svgW, height: svgH }}>
+      <svg width={svgW} height={svgH} viewBox={`0 0 ${svgW} ${svgH}`} className="opacity-[0.15]">
+        <defs>
+          <filter id="gear-glow-soft">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+        </defs>
+
+        <g filter="url(#gear-glow-soft)">
+          <g className="gear-large-v2" style={{ transformOrigin: `${largeCx}px ${largeCy}px` }}>
+            <path d={generateSoftGearPath(largeCx, largeCy, largeTeeth, largeOuterR, largeRootR)}
+              fill="#2563EB" stroke="#93C5FD" strokeWidth="1.5" strokeLinejoin="round" />
+            <circle cx={largeCx} cy={largeCy} r={largeRootR - 8} fill="#1E40AF" stroke="#93C5FD" strokeWidth="0.5" />
+            <circle cx={largeCx} cy={largeCy} r={largeHubR} fill="#080E1A" stroke="#60A5FA" strokeWidth="2" />
+            {Array.from({ length: 5 }, (_, i) => {
+              const rad = (i * 72) * Math.PI / 180;
+              return (
+                <line key={i} x1={largeCx + 168 * Math.cos(rad)} y1={largeCy + 168 * Math.sin(rad)}
+                  x2={largeCx + 230 * Math.cos(rad)} y2={largeCy + 230 * Math.sin(rad)}
+                  stroke="#60A5FA" strokeWidth="6" strokeLinecap="round" opacity="0.4" />
+              );
+            })}
+            <circle cx={largeCx} cy={largeCy} r={20} fill="#1E40AF" stroke="#60A5FA" strokeWidth="2" />
+            <circle cx={largeCx} cy={largeCy} r={8} fill="#2563EB" />
+          </g>
+        </g>
+
+        <g filter="url(#gear-glow-soft)">
+          <g className="gear-small-v2" style={{ transformOrigin: `${smallCx}px ${smallCy}px` }}>
+            <path d={generateSoftGearPath(smallCx, smallCy, smallTeeth, smallOuterR, smallRootR)}
+              fill="#2563EB" stroke="#93C5FD" strokeWidth="1.5" strokeLinejoin="round" />
+            <circle cx={smallCx} cy={smallCy} r={smallRootR - 6} fill="#1E40AF" stroke="#93C5FD" strokeWidth="0.5" />
+            <circle cx={smallCx} cy={smallCy} r={smallHubR} fill="#080E1A" stroke="#60A5FA" strokeWidth="2" />
+            {Array.from({ length: 3 }, (_, i) => {
+              const rad = (i * 120) * Math.PI / 180;
+              return (
+                <line key={i} x1={smallCx + 106 * Math.cos(rad)} y1={smallCy + 106 * Math.sin(rad)}
+                  x2={smallCx + 141 * Math.cos(rad)} y2={smallCy + 141 * Math.sin(rad)}
+                  stroke="#60A5FA" strokeWidth="5" strokeLinecap="round" opacity="0.4" />
+              );
+            })}
+            <circle cx={smallCx} cy={smallCy} r={14} fill="#1E40AF" stroke="#60A5FA" strokeWidth="2" />
+            <circle cx={smallCx} cy={smallCy} r={5} fill="#2563EB" />
+          </g>
+        </g>
+      </svg>
+
+      <style>{`
+        .gear-large-v2 { animation: gear-cw-v2 ${largePeriod}s linear infinite; animation-delay: ${meshDelay}s; }
+        .gear-small-v2 { animation: gear-ccw-v2 ${smallPeriod}s linear infinite; }
+        @keyframes gear-cw-v2  { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gear-ccw-v2 { from { transform: rotate(${smallPhaseOffset}deg); } to { transform: rotate(${smallPhaseOffset - 360}deg); } }
+      `}</style>
+    </div>
+  );
+};
+
 const HomePage = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        setMousePos({
+          x: (e.clientX - rect.left) / rect.width,
+          y: (e.clientY - rect.top) / rect.height,
+        });
+      }
+    };
+    window.addEventListener('mousemove', handleMouse);
+    return () => window.removeEventListener('mousemove', handleMouse);
+  }, []);
+
   return (
     <div className="overflow-hidden">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center pt-20 bg-[radial-gradient(ellipse_70%_60%_at_20%_35%,rgba(37,99,235,0.12)_0%,transparent_70%),#080E1A]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center py-20">
-          <motion.div 
+      {/* Hero Section — Full-Bleed Cinematic */}
+      <section 
+        ref={heroRef}
+        className="hero-section relative min-h-screen flex items-end overflow-hidden"
+      >
+        {/* BG Image with parallax */}
+        <motion.div 
+          className="absolute inset-0 z-0"
+          animate={{ 
+            x: (mousePos.x - 0.5) * -20,
+            y: (mousePos.y - 0.5) * -10,
+          }}
+          transition={{ type: 'tween', ease: 'easeOut', duration: 0.8 }}
+        >
+          <div 
+            className="absolute inset-[-40px] bg-cover bg-center"
+            style={{ backgroundImage: `url('/Car images/Open hood car.png')` }}
+          />
+        </motion.div>
+
+        {/* Cinematic Gradient Overlays */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#080E1A] via-[#080E1A]/80 to-transparent" />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#080E1A]/90 via-[#080E1A]/40 to-transparent" />
+        <div 
+          className="absolute inset-0 z-[2] opacity-30 transition-opacity duration-700"
+          style={{
+            background: `radial-gradient(600px circle at ${mousePos.x * 100}% ${mousePos.y * 100}%, rgba(37,99,235,0.15), transparent)`,
+          }}
+        />
+
+        {/* Animated Sparks */}
+        <HeroSparks />
+
+        {/* Scan Line Effect */}
+        <div className="absolute inset-0 z-[3] pointer-events-none hero-scanlines opacity-[0.03]" />
+
+        {/* Hero Content */}
+        <div className="relative z-20 max-w-7xl mx-auto px-6 pb-24 pt-40 w-full">
+          <div className="max-w-3xl">
+            {/* Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center gap-3 mb-6"
+            >
+              <span className="w-10 h-[2px] bg-blue-primary" />
+              <span className="text-blue-primary font-bold uppercase tracking-[0.2em] text-xs">
+                Alexandria, Louisiana · Est. 20+ Years
+              </span>
+            </motion.div>
+
+            {/* Main Heading — Staggered */}
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-6 leading-[0.95] tracking-tight"
+            >
+              We Don't Just<br />
+              Rebuild.
+            </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight hero-gradient-text"
+            >
+              We Remanufacture.
+            </motion.h1>
+
+            {/* Subtext */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              className="text-lg md:text-xl text-white/70 mb-10 max-w-xl leading-relaxed"
+            >
+              Remanufactured transmissions, engines, exhaust & suspension — backed by a 
+              <span className="text-blue-primary font-semibold"> 3-Year Nationwide Unlimited Mileage Warranty</span>. 
+              Expert 1–3 day turnaround.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+              className="flex flex-wrap gap-4 mb-16"
+            >
+              <button 
+                onClick={() => onNavigate('contact')} 
+                className="hero-cta-primary group"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Get a Free Estimate 
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+              <a 
+                href={`tel:${BUSINESS_INFO.phoneRaw}`} 
+                className="btn-outline backdrop-blur-sm border-white/20 hover:border-blue-primary"
+              >
+                <Phone size={18} /> Call {BUSINESS_INFO.phone}
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Floating Stat Badges */}
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-7"
+            transition={{ duration: 0.8, delay: 1.3 }}
+            className="flex flex-wrap gap-4 md:gap-6"
           >
-            <span className="eyebrow">ALEXANDRIA, LOUISIANA · 20+ YEARS OF EXPERIENCE</span>
-            <h1 className="text-5xl md:text-7xl mb-6 leading-[1.1]">
-              We Don't Just Rebuild. <br />
-              <span className="text-blue-primary">We Remanufacture.</span>
-            </h1>
-            <p className="text-lg md:text-xl mb-10 max-w-xl">
-              Remanufactured transmissions, engines, exhaust, and suspension services — backed by a 3-Year Nationwide Unlimited Mileage Warranty. Expert 1–3 day turnaround on most jobs.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button onClick={() => onNavigate('contact')} className="btn-primary">
-                Free Estimate <ArrowRight size={20} />
-              </button>
-              <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="btn-outline">
-                Call {BUSINESS_INFO.phone}
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="lg:col-span-5 relative"
-          >
-            <div className="relative z-10 rounded-card overflow-hidden border border-border-subtle shadow-2xl">
-              <img src={IMAGES.shop[3]} alt="Shop" className="w-full h-auto" referrerPolicy="no-referrer" />
-            </div>
-            <div className="absolute -bottom-10 -right-10 w-2/3 z-20 rounded-card overflow-hidden border border-border-subtle shadow-2xl hidden sm:block">
-              <img src={IMAGES.shop[0]} alt="Transmission" className="w-full h-auto" referrerPolicy="no-referrer" />
-            </div>
-            <div className="absolute -bottom-4 right-4 z-30 bg-blue-primary py-3 px-6 rounded-full flex items-baseline gap-2 shadow-xl">
-              <span className="text-3xl font-black text-white">20+</span>
-              <span className="text-sm font-medium text-white/90">Years <span className="text-[10px] uppercase tracking-tighter opacity-60">EXPERTISE</span></span>
-            </div>
+            {[
+              { val: '20+', label: 'Years Experience' },
+              { val: '3-Year', label: 'Nationwide Warranty' },
+              { val: '1–3 Day', label: 'Turnaround' },
+              { val: '★ 4.9', label: 'Google Rating' },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.4 + i * 0.1 }}
+                className="hero-stat-badge"
+              >
+                <span className="text-white font-black text-lg">{stat.val}</span>
+                <span className="text-white/50 text-[10px] uppercase tracking-widest font-bold">{stat.label}</span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
+
+        {/* Meshed Gears — Bottom Right */}
+        <MeshedGears />
+
+        {/* Bottom edge fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-bg-dark to-transparent z-10" />
       </section>
 
       {/* Services Grid */}

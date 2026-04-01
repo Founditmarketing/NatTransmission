@@ -91,3 +91,94 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #2563EB;
 }
+
+/* ===== HERO SECTION ===== */
+
+.hero-section {
+  background: #080E1A;
+}
+
+/* Gradient text for "We Remanufacture." */
+.hero-gradient-text {
+  background: linear-gradient(135deg, #2563EB 0%, #60A5FA 40%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glowing primary CTA */
+.hero-cta-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  color: white;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 20px rgba(37, 99, 235, 0.4),
+    0 0 60px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.hero-cta-primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 
+    0 0 30px rgba(37, 99, 235, 0.6),
+    0 0 80px rgba(37, 99, 235, 0.25),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.hero-cta-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.15) 45%,
+    rgba(255,255,255,0.25) 50%,
+    rgba(255,255,255,0.15) 55%,
+    transparent 70%
+  );
+  transform: translateX(-150%);
+  animation: hero-shimmer 3s infinite;
+}
+@keyframes hero-shimmer {
+  0% { transform: translateX(-150%); }
+  60%, 100% { transform: translateX(150%); }
+}
+
+/* Glassmorphism stat badges */
+.hero-stat-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0.75rem 1.25rem;
+  background: rgba(17, 30, 51, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+.hero-stat-badge:hover {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Subtle scanlines */
+.hero-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,255,255,0.03) 2px,
+    rgba(255,255,255,0.03) 4px
+  );
+}
+

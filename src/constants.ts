@@ -13,20 +13,20 @@ export const BUSINESS_INFO = {
 };
 
 export const IMAGES = {
-  logo: "https://www.nattransmission.com/wp-content/uploads/2022/07/National-Transmission2.gif",
-  warrantyBadge: "https://www.nattransmission.com/wp-content/uploads/2022/07/National-Transmission-04.png",
+  logo: "https://nattransmission.com/wp-content/uploads/2022/07/National-Transmission2.gif",
+  warrantyBadge: "https://nattransmission.com/wp-content/uploads/2022/07/National-Transmission-04.png",
   shop: [
-    "https://www.nattransmission.com/wp-content/uploads/2022/06/DSC_0519.jpeg",
-    "https://www.nattransmission.com/wp-content/uploads/2022/06/DSC_0519-2-1024x898.jpeg",
-    "https://www.nattransmission.com/wp-content/uploads/2022/06/DSC_0525.jpeg",
-    "https://www.nattransmission.com/wp-content/uploads/2022/06/DSC_0531.jpeg",
-    "https://www.nattransmission.com/wp-content/uploads/2022/07/exhausttech-0820-1-1.jpg"
+    "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0519.jpeg",
+    "/Car images/Open hood car.png",
+    "/Car images/Wheel with brakes.png",
+    "/Car images/Car.png",
+    "/Car images/brakes.png"
   ],
   service: {
-    transmission: "https://www.nattransmission.com/wp-content/uploads/2022/06/3.png",
-    engine: "https://www.nattransmission.com/wp-content/uploads/2022/06/1.png",
-    exhaust: "https://www.nattransmission.com/wp-content/uploads/2022/06/4.png",
-    suspension: "https://www.nattransmission.com/wp-content/uploads/2022/06/Untitled-design-7-e1656609769501.png"
+    transmission: "/Car images/Open hood car.png",
+    engine: "/Car images/Car.png",
+    exhaust: "/Car images/Wheel with brakes.png",
+    suspension: "/Car images/brakes.png"
   }
 };
 
@@ -53,8 +53,8 @@ export const SERVICES: Service[] = [
     longDesc: "At National Transmission, we take great pride in our remanufacturing services. We do much more than rebuild — we remanufacture, which brings the component as close to factory-new as possible. We handle all transmission models in the US and also perform remanufactured engines.",
     icon: Cog,
     accentColor: "text-accent-orange",
-    heroImage: IMAGES.shop[3],
-    detailImage: IMAGES.shop[0],
+    heroImage: "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0525.jpeg",
+    detailImage: "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0519.jpeg",
     tagline: "All models. All makes. 1–3 day turnaround.",
     checklist: [
       "All Transmission Models in the US",
@@ -74,8 +74,8 @@ export const SERVICES: Service[] = [
     longDesc: "We provide high-quality exhaust and catalytic converter services using the best equipment and the most qualified technicians. We make repairs on factory original systems as well as aftermarket name-brand mufflers.",
     icon: Gauge,
     accentColor: "text-accent-blue",
-    heroImage: IMAGES.shop[4],
-    detailImage: IMAGES.service.exhaust,
+    heroImage: "/Car images/Exhaust pipes II.png",
+    detailImage: "/Car images/Exhaust pipes.png",
     tagline: "Factory original systems and aftermarket installs.",
     checklist: [
       "Catalytic Converter Replacement & Repair",
@@ -93,8 +93,8 @@ export const SERVICES: Service[] = [
     longDesc: "The steering assembly steers the vehicle while the suspension absorbs the imperfections of the road. We service and repair front-end assemblies, suspension systems, and vehicle alignment.",
     icon: Car,
     accentColor: "text-accent-teal",
-    heroImage: IMAGES.shop[2],
-    detailImage: IMAGES.shop[2],
+    heroImage: "/Car images/Guy working on Suspension 2.png",
+    detailImage: "/Car images/Suspension.png",
     tagline: "Steering, suspension, and alignment — done right.",
     checklist: [
       "Front-End Assembly Service & Repair",
@@ -113,8 +113,8 @@ export const SERVICES: Service[] = [
     longDesc: "Your brakes are your vehicle's most critical safety system. We offer comprehensive brake inspection and repair for all makes and models. Whether you hear squealing or feel a soft pedal, our certified technicians get you back on the road safely.",
     icon: Shield,
     accentColor: "text-accent-green",
-    heroImage: IMAGES.shop[1],
-    detailImage: IMAGES.shop[0],
+    heroImage: "/Car images/Wheel with brakes.png",
+    detailImage: "/Car images/brakes.png",
     tagline: "Safety you can count on. All makes and models.",
     checklist: [
       "Brake Inspection for All Makes & Models",
