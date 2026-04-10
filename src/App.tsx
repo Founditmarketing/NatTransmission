@@ -452,7 +452,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-6 leading-[0.95] tracking-tight"
+              className="text-[2.25rem] sm:text-5xl md:text-7xl lg:text-8xl mb-2 leading-[0.95] tracking-tight"
             >
               We Don't Just<br />
               Rebuild.
@@ -461,7 +461,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="text-[2.4rem] sm:text-5xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight hero-gradient-text"
+              className="text-[2.25rem] sm:text-5xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight hero-gradient-text"
             >
               We Remanufacture.
             </motion.h1>
