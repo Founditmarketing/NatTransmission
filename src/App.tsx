@@ -40,9 +40,9 @@ const Navbar = ({ onNavigate, currentPage }: { onNavigate: (id: PageId) => void,
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <button onClick={() => onNavigate('home')} className="flex items-center gap-3 group">
           <img src={IMAGES.logo} alt="National Transmission" className="h-10 md:h-12" referrerPolicy="no-referrer" />
-          <div className="hidden sm:block text-left">
-            <span className="block text-white font-black text-lg leading-none group-hover:text-blue-primary transition-colors">NATIONAL</span>
-            <span className="block text-blue-primary font-bold text-xs tracking-widest uppercase">Transmission</span>
+          <div className="text-left">
+            <span className="block text-white font-black text-base sm:text-lg leading-none group-hover:text-blue-primary transition-colors">NATIONAL</span>
+            <span className="block text-blue-primary font-bold text-[10px] sm:text-xs tracking-widest uppercase">Transmission</span>
           </div>
         </button>
 
@@ -452,7 +452,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-6 leading-[0.95] tracking-tight"
+              className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl mb-6 leading-[0.95] tracking-tight"
             >
               We Don't Just<br />
               Rebuild.
@@ -461,7 +461,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight hero-gradient-text"
+              className="text-[2.4rem] sm:text-5xl md:text-7xl lg:text-8xl mb-8 leading-[0.95] tracking-tight hero-gradient-text"
             >
               We Remanufacture.
             </motion.h1>
