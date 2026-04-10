@@ -832,8 +832,8 @@ const ServicePage = ({ service, onNavigate }: { service: Service, onNavigate: (i
         </div>
       </section>
 
-      {/* Sub-nav Strip */}
-      <div className="bg-bg-dark border-y border-border-subtle sticky top-20 z-40 overflow-x-auto">
+      {/* Sub-nav Strip — hidden on mobile to avoid "double menu" with the hamburger nav */}
+      <div className="hidden lg:block bg-bg-dark border-y border-border-subtle sticky top-20 z-40 overflow-x-auto">
         <div className="max-w-7xl mx-auto px-6 py-4 flex gap-4 min-w-max">
           {SERVICES.map(s => (
             <button 
