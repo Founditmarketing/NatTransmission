@@ -4,7 +4,7 @@ export const BUSINESS_INFO = {
   name: "National Transmission",
   phone: "(318) 445-2244",
   phoneRaw: "3184452244",
-  email: "nattransmission@gmail.com",
+  email: "Hr@nattireauto.com",
   address: "1521 MacArthur Dr., Alexandria, LA",
   hours: "Mon–Fri 8am–5pm",
   facebook: "https://www.facebook.com/NationalTransmissionLLC",
