@@ -189,22 +189,55 @@ const Footer = ({ onNavigate }: { onNavigate: (id: PageId) => void }) => {
 };
 
 const ContactForm = () => {
-  return (
-    <form action={`mailto:${BUSINESS_INFO.email}`} method="POST" encType="text/plain" className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input type="text" name="Name" placeholder="Your Name" required className="input-field" />
-        <input type="tel" name="Phone" placeholder="Phone Number" required className="input-field" />
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '', service: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Estimate Request – ${formData.service || 'General Inquiry'}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nService: ${formData.service}\n\nMessage:\n${formData.message}`
+    );
+    window.location.href = `mailto:${BUSINESS_INFO.email}?subject=${subject}&body=${body}`;
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 bg-accent-green/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle2 className="text-accent-green" size={32} />
+        </div>
+        <h4 className="text-2xl text-white font-bold mb-3">Email Client Opened!</h4>
+        <p className="text-text-muted mb-6">Complete sending the pre-filled email in your email app to reach us.</p>
+        <p className="text-text-muted mb-8">Or call us directly at <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="text-blue-primary font-bold hover:underline">{BUSINESS_INFO.phone}</a></p>
+        <button onClick={() => { setSubmitted(false); setFormData({ name: '', phone: '', email: '', service: '', message: '' }); }} className="text-blue-primary font-bold hover:underline">
+          ← Submit another request
+        </button>
       </div>
-      <input type="email" name="Email" placeholder="Email Address" required className="input-field" />
-      <select name="Service" required className="input-field">
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input type="text" name="name" placeholder="Your Name" required className="input-field" value={formData.name} onChange={handleChange} />
+        <input type="tel" name="phone" placeholder="Phone Number" required className="input-field" value={formData.phone} onChange={handleChange} />
+      </div>
+      <input type="email" name="email" placeholder="Email Address" required className="input-field" value={formData.email} onChange={handleChange} />
+      <select name="service" required className="input-field" value={formData.service} onChange={handleChange}>
         <option value="">Select Service</option>
-        <option value="transmission">Transmission</option>
-        <option value="exhaust">Exhaust</option>
-        <option value="suspension">Front End & Suspension</option>
-        <option value="brakes">Brakes</option>
-        <option value="other">Other</option>
+        <option value="Transmission">Transmission</option>
+        <option value="Exhaust">Exhaust</option>
+        <option value="Front End & Suspension">Front End & Suspension</option>
+        <option value="Brakes">Brakes</option>
+        <option value="Other">Other</option>
       </select>
-      <textarea name="Message" placeholder="How can we help?" rows={4} className="input-field"></textarea>
+      <textarea name="message" placeholder="How can we help?" rows={4} className="input-field" value={formData.message} onChange={handleChange}></textarea>
       <button type="submit" className="btn-primary w-full justify-center">
         Send Estimate Request <ArrowRight size={20} />
       </button>
