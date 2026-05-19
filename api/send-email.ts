@@ -1,23 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
 import { Resend } from 'resend';
 
-// Load environment variables from .env.local
-dotenv.config({ path: '.env.local' });
-
-const app = express();
-const port = process.env.PORT || 3001;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// API Routes
-app.post('/api/send-email', async (req, res) => {
+export default async function handler(req: any, res: any) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
   try {
     const { Name, Phone, Email, Service, Message } = req.body;
 
@@ -46,13 +35,9 @@ app.post('/api/send-email', async (req, res) => {
       return res.status(400).json({ error });
     }
 
-    res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, data });
   } catch (error) {
     console.error('Server Error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+}
