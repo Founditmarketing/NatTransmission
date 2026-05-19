@@ -13,10 +13,10 @@ export const BUSINESS_INFO = {
 };
 
 export const IMAGES = {
-  logo: "https://nattransmission.com/wp-content/uploads/2022/07/National-Transmission2.gif",
-  warrantyBadge: "https://nattransmission.com/wp-content/uploads/2022/07/National-Transmission-04.png",
+  logo: "/Car images/National-Transmission2.gif",
+  warrantyBadge: "/Car images/Wheel with brakes.png",
   shop: [
-    "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0519.jpeg",
+    "/Car images/Guy working on Suspension 2.png",
     "/Car images/Open hood car.png",
     "/Car images/Wheel with brakes.png",
     "/Car images/Car.png",
@@ -73,8 +73,8 @@ export const SERVICES: Service[] = [
     longDesc: "At National Transmission, we don\u2019t just rebuild \u2014 we remanufacture. Every wear component is replaced and restored beyond factory specifications using precision engineering that exceeds OEM baselines. We address known model-specific failure points proactively: pump wear, soft-part degradation, solenoid pack issues, and more. This is why our transmissions outlast ordinary rebuilds and why we back every unit with a 3-Year Nationwide Unlimited Mileage Warranty. We service all transmission models in the US for all makes and models.",
     icon: Cog,
     accentColor: "text-accent-orange",
-    heroImage: "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0525.jpeg",
-    detailImage: "https://nattransmission.com/wp-content/uploads/2022/06/DSC_0519.jpeg",
+    heroImage: "/Car images/Car.png",
+    detailImage: "/Car images/Open hood car.png",
     tagline: "Built Beyond Factory. Backed for 3 Years.",
     checklist: [
       "All Transmission Models in the US",
