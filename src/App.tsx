@@ -1265,8 +1265,37 @@ const ContactPage = () => (
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageId>('home');
 
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname.substring(1);
+      const id = (path === '' ? 'home' : path) as PageId;
+      const validPages: PageId[] = [
+        'home', 'transmission', 'exhaust', 'suspension', 'brakes', 'remanned', 'warranty', 'contact',
+        'general-repair',
+        'suspension-tie-rod', 'suspension-ball-joints', 'suspension-struts', 'suspension-control-arms',
+        'suspension-wheel-alignment', 'suspension-wheel-bearings', 'suspension-power-steering',
+        'suspension-cv-axle', 'suspension-sway-bar',
+        'repair-diagnostics', 'repair-ac', 'repair-heating', 'repair-brakes-full', 'repair-oil-change',
+        'repair-battery', 'repair-alternator', 'repair-starter', 'repair-radiator', 'repair-fuel-system',
+        'repair-timing-belt', 'repair-truck-service',
+        'catalytic-replacement', 'catalytic-repair', 'exhaust-leak-repair', 'muffler-service', 'o2-sensor'
+      ];
+      if (validPages.includes(id)) {
+        setCurrentPage(id);
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    handlePopState();
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleNavigate = (id: PageId) => {
     setCurrentPage(id);
+    const path = id === 'home' ? '/' : `/${id}`;
+    window.history.pushState(null, '', path);
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
