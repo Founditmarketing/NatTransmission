@@ -10,6 +10,7 @@ import {
   Phone, Mail, Clock, MapPin, Facebook, ChevronRight, Menu, X, Star,
   CheckCircle2, ArrowRight, ChevronDown
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { BUSINESS_INFO, IMAGES, SERVICES, ALL_SUBPAGES, SUSPENSION_SUBPAGES, GENERAL_REPAIR_SUBPAGES, CATALYTIC_SUBPAGES, PageId, Service, SubService } from './constants';
 
 // --- Navbar ---
@@ -1336,6 +1337,7 @@ export default function App() {
         </AnimatePresence>
       </main>
       <Footer onNavigate={handleNavigate} />
+      <Analytics />
     </div>
   );
 }
